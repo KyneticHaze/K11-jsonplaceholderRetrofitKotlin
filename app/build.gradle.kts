@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -41,14 +42,25 @@ val retrofitVersion = "2.9.0"
 val rxJavaVersion = "3.1.5"
 val rxAndroidVersion = "3.0.2"
 val gsonVersion = "2.10.1"
+val navVersion = "2.7.2"
 
 dependencies {
 
+    //Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+
+    //RxJava
     implementation ("io.reactivex.rxjava3:rxjava:$rxJavaVersion")
+    //RxAndroid
     implementation ("io.reactivex.rxjava3:rxandroid:$rxAndroidVersion")
+    //Retrofit
     implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    //Gson
     implementation ("com.google.code.gson:gson:$gsonVersion")
+    //Gson Converter
     implementation ("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    //Retrofit-RxJava
     implementation ("com.squareup.retrofit2:adapter-rxjava3:$retrofitVersion")
 
     implementation("androidx.core:core-ktx:1.12.0")
