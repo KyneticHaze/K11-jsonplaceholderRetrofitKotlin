@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity(), UsersAdapter.Listener {
     private var usersModels : List<UsersModel>? = null
     private var cd : CompositeDisposable? = null
     private lateinit var usersAdapter : UsersAdapter
+    private val phoneNumberStr = "Phone Number:"
+    private val alertButtonMessage = "Cancel?"
+    private val alertMessageResult = "Canceled"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,11 +73,11 @@ class MainActivity : AppCompatActivity(), UsersAdapter.Listener {
         val alert = AlertDialog.Builder(this@MainActivity)
 
         alert.setTitle(userModel.name)
-        alert.setMessage(userModel.email)
-        alert.setNegativeButton("Cancel?") {
+        alert.setMessage("$phoneNumberStr ${userModel.phone}")
+        alert.setNegativeButton(alertButtonMessage) {
                 p0, p1 ->
             Toast
-                .makeText(this@MainActivity, "Cancelling", Toast.LENGTH_SHORT)
+                .makeText(this@MainActivity, alertMessageResult, Toast.LENGTH_SHORT)
                 .show()
         }
         alert.show()
