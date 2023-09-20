@@ -42,13 +42,8 @@ val retrofitVersion = "2.9.0"
 val rxJavaVersion = "3.1.5"
 val rxAndroidVersion = "3.0.2"
 val gsonVersion = "2.10.1"
-val navVersion = "2.7.2"
 
 dependencies {
-
-    //Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     //RxJava
     implementation ("io.reactivex.rxjava3:rxjava:$rxJavaVersion")
