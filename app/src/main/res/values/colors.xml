@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="cyan">#34ebdb</color>
+    <color name="royal">#8a5ba6</color>
+    <color name="fuchsia">#a65b87</color>
+    <color name="mustard">#a69e5b</color>
+    <color name="champagne">#cf8f7c</color>
+    <color name="sky">#7280ab</color>
+    <color name="yellowGreen">#b3e384</color>
+    <color name="greensky">#428a6c</color>
 </resources>
