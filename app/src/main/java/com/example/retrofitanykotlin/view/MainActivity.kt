@@ -9,11 +9,13 @@ import com.example.retrofitanykotlin.adapter.UsersAdapter
 import com.example.retrofitanykotlin.databinding.ActivityMainBinding
 import com.example.retrofitanykotlin.model.UsersModel
 import com.example.retrofitanykotlin.service.UsersApiService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 
@@ -21,11 +23,14 @@ class MainActivity : AppCompatActivity(), UsersAdapter.Listener {
     private lateinit var binding: ActivityMainBinding
     private val baseUrl = "https://jsonplaceholder.typicode.com/"
     private var usersModels : List<UsersModel>? = null
-    private var cd : CompositeDisposable? = null
     private lateinit var usersAdapter : UsersAdapter
     private val phoneNumberStr = "Phone Number:"
     private val alertButtonMessage = "Cancel?"
     private val alertMessageResult = "Canceled"
+    private var job: Job? = null
+    private var handler = CoroutineExceptionHandler { coroutineContext, throwable ->
+        Toast.makeText(this, throwable.localizedMessage, Toast.LENGTH_LONG).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +38,6 @@ class MainActivity : AppCompatActivity(), UsersAdapter.Listener {
         val view = binding.root
         setContentView(view)
 
-        cd = CompositeDisposable()
         binding.usersRecycler.layoutManager = LinearLayoutManager(this)
 
         pullData()
@@ -43,30 +47,25 @@ class MainActivity : AppCompatActivity(), UsersAdapter.Listener {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .build().create(UsersApiService::class.java)
+            .build()
+            .create(UsersApiService::class.java)
 
-        val getData = retrofit.getUsersData()
+        job = CoroutineScope(Dispatchers.IO + handler).launch {
+            val response = retrofit.getUsersData()
 
-        cd?.addAll(getData
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::handleResponse, this::handleError)
-        )
-    }
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    response.body()?.let {userModeList ->
+                        usersModels = ArrayList(userModeList)
 
-    private fun handleResponse(userListParams : List<UsersModel>) {
-        usersModels = userListParams
-
-        usersModels?.let {
-            usersAdapter = UsersAdapter(it, this@MainActivity)
+                        usersModels?.let {userModel ->
+                            usersAdapter = UsersAdapter(userModel,this@MainActivity)
+                        }
+                        binding.usersRecycler.adapter = usersAdapter
+                    }
+                }
+            }
         }
-
-        binding.usersRecycler.adapter = usersAdapter
-    }
-
-    private fun handleError(exception :Throwable) {
-        println(exception.localizedMessage)
     }
 
     override fun onItemClick(userModel: UsersModel) {
@@ -85,6 +84,6 @@ class MainActivity : AppCompatActivity(), UsersAdapter.Listener {
 
     override fun onDestroy() {
         super.onDestroy()
-        cd?.clear()
+        job?.cancel()
     }
 }
