@@ -39,8 +39,6 @@ android {
     }
 }
 val retrofitVersion = "2.9.0"
-val rxJavaVersion = "3.1.5"
-val rxAndroidVersion = "3.0.2"
 val gsonVersion = "2.10.1"
 
 dependencies {
