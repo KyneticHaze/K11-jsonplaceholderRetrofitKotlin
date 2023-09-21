@@ -44,19 +44,14 @@ val rxAndroidVersion = "3.0.2"
 val gsonVersion = "2.10.1"
 
 dependencies {
-
-    //RxJava
-    implementation ("io.reactivex.rxjava3:rxjava:$rxJavaVersion")
-    //RxAndroid
-    implementation ("io.reactivex.rxjava3:rxandroid:$rxAndroidVersion")
     //Retrofit
     implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")
     //Gson
     implementation ("com.google.code.gson:gson:$gsonVersion")
     //Gson Converter
     implementation ("com.squareup.retrofit2:converter-gson:$retrofitVersion")
-    //Retrofit-RxJava
-    implementation ("com.squareup.retrofit2:adapter-rxjava3:$retrofitVersion")
+    //Coroutines android
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
