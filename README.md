@@ -8,6 +8,7 @@
 - Gson
 - RecyclerView
 - [Jsonplaceholder API](https://jsonplaceholder.typicode.com/)
+- Coroutines
 
 ### First Screen:
 
